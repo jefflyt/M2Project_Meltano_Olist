@@ -23,7 +23,7 @@ plugins:
     pip_url: git+https://github.com/z3z1ma/target-bigquery.git
     config:
       batch_size: 104857600
-      credentials_json: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-83602af8e231.json
+      credentials_json: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-93b68490ad0f.json
       dataset: Olist_staging
       denormalized: true
       flattening_max_depth: 1

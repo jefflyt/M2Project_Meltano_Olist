@@ -11,10 +11,22 @@ plugins:
     variant: meltanolabs
     pip_url: meltanolabs-tap-postgres
     config:
-      database: postgress
+      database: postgres
       filter_schemas:
-      - public
-      json_as_object: false
+        - public
       port: 5432
       user: postgres.wfpaqulgzvxvyosikwmj
       host: aws-1-ap-southeast-1.pooler.supabase.com
+  loaders:
+  - name: target-bigquery
+    variant: z3z1ma
+    pip_url: git+https://github.com/z3z1ma/target-bigquery.git
+    config:
+      batch_size: 104857600
+      credentials_json: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-83602af8e231.json
+      dataset: Olist_staging
+      denormalized: true
+      flattening_max_depth: 1
+      flattening_enabled: true
+      method: batch_job
+      project: 'extended-legend-470014-n7'

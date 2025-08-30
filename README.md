@@ -125,7 +125,7 @@ The main configuration is in `meltano.yml`. Key settings:
 
 - **Source Database**: PostgreSQL on Supabase
 - **Target**: Google BigQuery
-- **Dataset**: `Olist_staging`
+- **Dataset**: `olist_raw`
 - **Project**: `extended-legend-470014-n7`
 
 ## 🎬 Usage

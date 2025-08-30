@@ -26,7 +26,7 @@ from pathlib import Path
 # Configuration
 CREDENTIALS_FILE = "/Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-db75dec7d87a.json"
 PROJECT_ID = "extended-legend-470014-n7"
-DATASET_ID = "Olist_staging"
+DATASET_ID = "olist_raw"
 
 def print_header():
     """Print script header information."""

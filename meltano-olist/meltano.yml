@@ -56,7 +56,7 @@ plugins:
       credentials_path: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-db75dec7d87a.json
 
       # BigQuery target settings
-      dataset: Olist_staging
+      dataset: olist_raw
       denormalized: true      # Flatten nested data structures
       flattening_max_depth: 1 # Maximum depth for flattening
       flattening_enabled: true

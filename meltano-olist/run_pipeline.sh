@@ -36,7 +36,7 @@ fi
 
 # Activate the elt conda environment
 echo "🐍 Activating conda environment 'elt'..."
-source ~/anaconda3/etc/profile.d/conda.sh
+source /Users/jefflee/Applications/anaconda3/etc/profile.d/conda.sh
 
 if ! conda activate elt; then
     echo "❌ Error: Failed to activate conda environment 'elt'"
@@ -59,7 +59,7 @@ fi
 # Display pipeline information
 echo "📊 Pipeline Configuration:"
 echo "   Source: PostgreSQL (Supabase)"
-echo "   Target: Google BigQuery (extended-legend-470014-n7:Olist_staging)"
+echo "   Target: Google BigQuery (extended-legend-470014-n7:olist_raw)"
 echo "   Environment: $(meltano config get default_environment)"
 echo ""
 
@@ -74,7 +74,7 @@ meltano run tap-postgres target-bigquery
 if [ $? -eq 0 ]; then
     echo ""
     echo "✅ Pipeline completed successfully!"
-    echo "📈 Data has been loaded to BigQuery dataset: Olist_staging"
+    echo "📈 Data has been loaded to BigQuery dataset: olist_raw"
     echo ""
     echo "🔍 Next steps:"
     echo "   - Check BigQuery console for loaded data"

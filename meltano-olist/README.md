@@ -35,7 +35,7 @@ This is the core Meltano project for the Olist E-commerce Data Pipeline. It hand
 
 ### Target: Google BigQuery
 - **Project:** extended-legend-470014-n7
-- **Dataset:** Olist_staging
+- **Dataset:** olist_raw
 - **Method:** Batch loading with denormalization
 
 ## 🔧 Configuration
@@ -131,7 +131,7 @@ meltano --log-level=debug run tap-postgres target-bigquery
 
 3. **Dataset Not Found:**
    ```bash
-   bq mk --dataset extended-legend-470014-n7:Olist_staging
+   bq mk --dataset extended-legend-470014-n7:olist_raw
    ```
 
 ### Debug Mode

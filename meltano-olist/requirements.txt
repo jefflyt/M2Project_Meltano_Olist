@@ -1,0 +1,49 @@
+# Python Dependencies for Meltano Olist ETL Pipeline
+# ==================================================
+#
+# This file lists the Python packages required for the ETL pipeline.
+# Install with: pip install -r requirements.txt
+#
+# Last Updated: August 30, 2025
+# ==================================================
+
+# Core ETL Framework
+meltano>=3.0.0
+
+# Google Cloud Libraries
+google-cloud-bigquery>=3.0.0
+google-auth>=2.0.0
+google-cloud-storage>=2.0.0
+
+# Database Libraries
+psycopg2-binary>=2.9.0
+sqlalchemy>=1.4.0
+
+# Data Processing
+pandas>=1.5.0
+numpy>=1.21.0
+
+# Meltano Plugins (automatically managed by Meltano)
+# meltanolabs-tap-postgres
+# target-bigquery (z3z1ma variant)
+
+# Development and Testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Logging and Monitoring
+structlog>=22.0.0
+
+# Optional: Jupyter for data exploration
+jupyter>=1.0.0
+ipykernel>=6.0.0
+
+# Optional: Data visualization
+matplotlib>=3.5.0
+seaborn>=0.11.0
+
+# Notes:
+# - Meltano plugins are installed automatically via meltano.yml
+# - Google Cloud libraries are required for BigQuery operations
+# - Database libraries are needed for PostgreSQL connections
+# - Development packages are optional but recommended for testing

@@ -1,32 +1,70 @@
+# Meltano Configuration for Olist E-commerce ETL Pipeline
+# ========================================================
+#
+# This configuration defines the ETL pipeline that extracts data from
+# PostgreSQL (Supabase) and loads it into Google BigQuery.
+#
+# Pipeline: tap-postgres → target-bigquery
+#
+# Author: M2Project Team
+# Last Updated: August 30, 2025
+# ========================================================
+
 version: 1
+
+# Default environment for pipeline execution
 default_environment: dev
+
+# Unique project identifier
 project_id: b8644576-3b67-453a-8f52-fe664f1834b7
+
+# Available environments
 environments:
-- name: dev
-- name: staging
-- name: prod
+- name: dev        # Development environment
+- name: staging    # Staging environment
+- name: prod       # Production environment
+
+# Plugin configurations
 plugins:
+  # Data Extractors
   extractors:
   - name: tap-postgres
     variant: meltanolabs
     pip_url: meltanolabs-tap-postgres
     config:
+      # PostgreSQL connection settings
       database: postgres
       filter_schemas:
-        - public
+        - public          # Only extract from public schema
       port: 5432
       user: postgres.wfpaqulgzvxvyosikwmj
       host: aws-1-ap-southeast-1.pooler.supabase.com
+
+      # Additional settings (can be overridden by environment variables)
+      # password: ${TAP_POSTGRES_PASSWORD}  # Set in .env file
+
+  # Data Loaders
   loaders:
   - name: target-bigquery
     variant: z3z1ma
     pip_url: git+https://github.com/z3z1ma/target-bigquery.git
     config:
-      batch_size: 104857600
+      # Batch processing settings
+      batch_size: 104857600  # 100MB batch size for optimal performance
+
+      # Authentication
       credentials_path: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-db75dec7d87a.json
+
+      # BigQuery target settings
       dataset: Olist_staging
-      denormalized: true
-      flattening_max_depth: 1
+      denormalized: true      # Flatten nested data structures
+      flattening_max_depth: 1 # Maximum depth for flattening
       flattening_enabled: true
-      method: batch_job
+      method: batch_job       # Use BigQuery batch loading
       project: 'extended-legend-470014-n7'
+
+# Notes:
+# - Credentials path should be updated for different environments
+# - Dataset will be created automatically if it doesn't exist
+# - Batch size can be adjusted based on data volume and performance needs
+# - Consider using meltano environments for different deployment targets

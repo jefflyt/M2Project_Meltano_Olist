@@ -2,17 +2,24 @@
 # Unified Olist Project Profiles Configuration
 # =================================================================
 # 
-# This profiles.yml file supports all dbt projects in the workspace:
-# - meltano_olist (in meltano-olist/ directory) 
-# - dbt_clean_olist (in dbt_clean_olist/ directory)
+# This profiles.yml file supports the complete Olist data pipeline:
+# 
+# 1. MELTANO PROJECT (meltano_olist):
+#    - Extract data from Supabase PostgreSQL
+#    - Load raw data into BigQuery olist_raw dataset
+# 
+# 2. DBT PROJECT (dbt_olist) - 3-Layer Architecture:
+#    - PART 1: Staging - Clean raw data → olist_stag dataset
+#    - PART 2: Warehouse - Build star schema → olist_warehouse dataset  
+#    - PART 3: Analytics - Create mart views → olist_analytics dataset
 #
 # Author: M2Project Team
 # Last Updated: August 31, 2025
 # =================================================================
 
-# Meltano Olist Project Profile
+# 1. MELTANO PROJECT: Extract from Supabase → Load to BigQuery olist_raw
 meltano_olist:
-  target: dev
+  target: staging
   outputs:
     dev:
       type: bigquery
@@ -26,6 +33,7 @@ meltano_olist:
       priority: interactive
       job_retries: 1
 
+    # PART 1: Staging - Clean olist_raw → olist_staging
     staging:
       type: bigquery
       method: service-account
@@ -38,11 +46,12 @@ meltano_olist:
       priority: interactive
       job_retries: 1
 
-    prod:
+    # PART 2: Warehouse - Star schema with 1 fact + 8 dim tables
+    warehouse:
       type: bigquery
       method: service-account
       project: extended-legend-470014-n7
-      dataset: olist_analytics
+      dataset: olist_warehouse
       location: US
       keyfile: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-db75dec7d87a.json
       job_execution_timeout_seconds: 300
@@ -50,35 +59,8 @@ meltano_olist:
       priority: interactive
       job_retries: 1
 
-# Clean Olist Data Transformation Profile
-dbt_olist:
-  target: dev
-  outputs:
-    dev:
-      type: bigquery
-      method: service-account
-      project: extended-legend-470014-n7
-      dataset: olist_staging
-      location: US
-      keyfile: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-db75dec7d87a.json
-      job_execution_timeout_seconds: 300
-      maximum_bytes_billed: 1000000000
-      priority: interactive
-      job_retries: 1
-
-    staging:
-      type: bigquery
-      method: service-account
-      project: extended-legend-470014-n7
-      dataset: olist_staging
-      location: US
-      keyfile: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-db75dec7d87a.json
-      job_execution_timeout_seconds: 300
-      maximum_bytes_billed: 1000000000
-      priority: interactive
-      job_retries: 1
-
-    prod:
+    # PART 3: Analytics - Mart views for business objectives
+    analytics:
       type: bigquery
       method: service-account
       project: extended-legend-470014-n7

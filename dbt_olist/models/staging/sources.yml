@@ -1,0 +1,32 @@
+version: 2
+
+sources:
+  - name: olist_raw
+    description: "Raw Olist e-commerce data extracted from Supabase PostgreSQL"
+    tables:
+      - name: public_olist_customers
+        description: "Customer information including location and unique identifiers"
+            
+      - name: public_olist_orders
+        description: "Order information including timestamps, status, and customer references"
+              
+      - name: public_olist_order_items
+        description: "Individual items within each order, including pricing and shipping information"
+        
+      - name: public_olist_order_payments
+        description: "Payment transaction details including methods and installments"
+        
+      - name: public_olist_order_reviews
+        description: "Customer reviews and ratings for completed orders"
+        
+      - name: public_olist_products
+        description: "Product catalog with dimensions, weight, and category information"
+        
+      - name: public_olist_sellers
+        description: "Seller information including location and unique identifiers"
+        
+      - name: public_olist_geolocation
+        description: "Geographic coordinates and location information for Brazilian zip codes"
+        
+      - name: public_product_category_name_translation
+        description: "Translation mapping for product categories from Portuguese to English"

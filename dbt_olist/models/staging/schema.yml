@@ -1,0 +1,199 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Staging model for Olist customers with data quality fixes"
+    columns:
+      - name: customer_id
+        description: "Primary Key - Unique customer identifier (32-char hexadecimal)"
+        tests:
+          - not_null
+          - unique
+        
+      - name: customer_unique_id
+        description: "Unique customer identifier across multiple orders"
+        tests:
+          - not_null
+          
+      - name: customer_zip_code_prefix
+        description: "First 5 digits of customer ZIP code (FIXED: restored leading zeros)"
+        tests:
+          - not_null
+              
+      - name: customer_city
+        description: "Customer city name (standardized uppercase)"
+        tests:
+          - not_null
+          
+      - name: customer_state
+        description: "Customer state abbreviation (2-letter Brazilian state codes)"
+        tests:
+          - not_null
+
+  - name: stg_orders
+    description: "Staging model for Olist orders with cleaned timestamps and status"
+    columns:
+      - name: order_id
+        description: "Primary key - unique order identifier"
+        tests:
+          - not_null
+          - unique
+
+      - name: customer_id
+        description: "Reference to customer_id"
+        tests:
+          - not_null
+
+      - name: order_status
+        description: "Normalized order status"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['created','approved','processing','invoiced','shipped','delivered','canceled','unavailable']
+
+      - name: order_purchase_timestamp
+        description: "Purchase timestamp (cast to TIMESTAMP)"
+        tests:
+          - not_null
+
+      - name: order_approved_at
+        description: "Order approval timestamp (cast to TIMESTAMP)"
+
+      - name: order_delivered_carrier_date
+        description: "Handover to carrier timestamp (cast to TIMESTAMP)"
+
+      - name: order_delivered_customer_date
+        description: "Delivery to customer timestamp (cast to TIMESTAMP)"
+
+      - name: order_estimated_delivery_date
+        description: "Estimated delivery date (cast to TIMESTAMP)"
+
+  - name: stg_geolocations
+    description: "Staging model for Olist geolocation data with intelligent duplication for missing customer ZIP codes"
+    columns:
+      - name: geolocation_zip_code_prefix
+        description: "ZIP code prefix (FIXED: restored leading zeros, includes ALL customer ZIP codes via intelligent duplication)"
+        tests:
+          - not_null
+          - unique
+      - name: geolocation_lat
+        description: "Latitude coordinate (mean for duplicates, duplicated from similar ZIP codes for missing customer ZIP codes)"
+        tests:
+          - not_null
+      - name: geolocation_lng
+        description: "Longitude coordinate (mean for duplicates, duplicated from similar ZIP codes for missing customer ZIP codes)"
+        tests:
+          - not_null
+      - name: geolocation_city
+        description: "City name (standardized uppercase, duplicated from similar ZIP codes for missing customer ZIP codes)"
+        tests:
+          - not_null
+      - name: geolocation_state
+        description: "State abbreviation (standardized uppercase, duplicated from similar ZIP codes for missing customer ZIP codes)"
+        tests:
+          - not_null
+
+  - name: stg_order_items
+    description: "Staging model for Olist order items with data quality fixes"
+    columns:
+      - name: order_id
+        description: "Foreign key - reference to order"
+        tests:
+          - not_null
+      - name: order_item_id
+        description: "Item sequence number within order"
+        tests:
+          - not_null
+      - name: product_id
+        description: "Foreign key - reference to product"
+        tests:
+          - not_null
+      - name: seller_id
+        description: "Foreign key - reference to seller"
+        tests:
+          - not_null
+      - name: price
+        description: "Item price in BRL (FIXED: precision with DECIMAL)"
+        tests:
+          - not_null
+      - name: freight_value
+        description: "Shipping cost in BRL (FIXED: precision with DECIMAL)"
+        tests:
+          - not_null
+
+  - name: stg_order_payments
+    description: "Staging model for Olist order payments with data quality fixes"
+    columns:
+      - name: order_id
+        description: "Foreign key - reference to order"
+        tests:
+          - not_null
+      - name: payment_sequential
+        description: "Payment sequence number"
+        tests:
+          - not_null
+      - name: payment_type
+        description: "Payment method (normalized lowercase)"
+        tests:
+          - not_null
+      - name: payment_installments
+        description: "Number of installments"
+        tests:
+          - not_null
+      - name: payment_value
+        description: "Payment amount in BRL (FIXED: precision with DECIMAL)"
+        tests:
+          - not_null
+
+  - name: stg_sellers
+    description: "Staging model for Olist sellers with data quality fixes"
+    columns:
+      - name: seller_id
+        description: "Primary key - unique seller identifier"
+        tests:
+          - not_null
+          - unique
+      - name: seller_zip_code_prefix
+        description: "Seller ZIP code prefix (FIXED: restored leading zeros)"
+        tests:
+          - not_null
+      - name: seller_city
+        description: "Seller city name (standardized uppercase)"
+        tests:
+          - not_null
+      - name: seller_state
+        description: "Seller state abbreviation (standardized uppercase)"
+        tests:
+          - not_null
+
+  - name: stg_products
+    description: "Staging model for Olist products with data quality fixes"
+    columns:
+      - name: product_id
+        description: "Primary key - unique product identifier"
+        tests:
+          - not_null
+          - unique
+      - name: product_category_name
+        description: "Product category (standardized lowercase)"
+      - name: product_name_lenght
+        description: "Character count in product name"
+      - name: product_description_length
+        description: "Character count in description (FIXED: corrected spelling from 'lenght')"
+      - name: product_photos_qty
+        description: "Number of product photos"
+      - name: product_weight_g
+        description: "Product weight in grams"
+
+  - name: stg_product_category_translation
+    description: "Staging model for product category translations"
+    columns:
+      - name: product_category_name
+        description: "Portuguese category name (standardized lowercase)"
+        tests:
+          - not_null
+          - unique
+      - name: product_category_name_english
+        description: "English category name (standardized lowercase)"
+        tests:
+          - not_null

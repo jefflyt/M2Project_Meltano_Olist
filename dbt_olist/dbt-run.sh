@@ -22,23 +22,23 @@ NC='\033[0m' # No Color
 
 # Project info
 PROJECT_NAME="dbt_olist"
-PROFILE_NAME="dbt_olist"
+PROFILE_NAME="meltano_olist"
 PROFILES_DIR="/Users/jefflee/SCTP/M2Project/M2Project_Meltano_Olist"
-DEFAULT_TARGET="dev"
+DEFAULT_TARGET="staging"
 
 echo -e "${CYAN}=================================================================${NC}"
 echo -e "${CYAN}🧹 Olist Data Transformation - Using Centralized Profiles${NC}"
 echo -e "${CYAN}=================================================================${NC}"
-echo -e "${BLUE}[${PROJECT_NAME}] Project: ${PROJECT_NAME}${NC}"
+echo -e "${BLUE}[${PROJECT_NAME}] Profile: ${PROFILE_NAME}${NC}"
 echo -e "${BLUE}[${PROJECT_NAME}] Profile Directory: ${PROFILES_DIR}${NC}"
-echo -e "${BLUE}[${PROJECT_NAME}] Target: ${DEFAULT_TARGET}${NC}"
+echo -e "${BLUE}[${PROJECT_NAME}] Default Target: ${DEFAULT_TARGET}${NC}"
 echo ""
 
 # Default to debug if no command provided
 COMMAND=${1:-debug}
 shift 2>/dev/null || true  # Remove first argument if it exists
 
-echo -e "${BLUE}[${PROJECT_NAME}] Running: dbt ${COMMAND} --profiles-dir ${PROFILES_DIR} $@${NC}"
+echo -e "${BLUE}[${PROJECT_NAME}] Running: dbt ${COMMAND} --target ${DEFAULT_TARGET} --profiles-dir ${PROFILES_DIR} $@${NC}"
 echo ""
 
 # Activate conda environment if available
@@ -48,8 +48,8 @@ if command -v conda &> /dev/null; then
     conda activate elt
 fi
 
-# Run the dbt command with centralized profiles
-if dbt ${COMMAND} --profiles-dir ${PROFILES_DIR} "$@"; then
+# Run the dbt command with centralized profiles and staging target
+if dbt ${COMMAND} --target ${DEFAULT_TARGET} --profiles-dir ${PROFILES_DIR} "$@"; then
     echo ""
     echo -e "${GREEN}[SUCCESS] dbt command completed successfully!${NC}"
     echo -e "${CYAN}=================================================================${NC}"

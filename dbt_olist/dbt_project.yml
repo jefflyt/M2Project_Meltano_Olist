@@ -3,7 +3,7 @@ version: '1.0.0'
 config-version: 2
 
 # This setting configures which "profile" dbt uses for this project.
-profile: 'dbt_olist'
+profile: 'meltano_olist'
 
 # These configurations specify where dbt should look for different types of files.
 model-paths: ["models"]
@@ -18,26 +18,26 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
-# Configure materializations
+# Configure materializations for 3-layer architecture
 models:
   dbt_olist:
-    # Config indicated by + and applies to all files under models/staging/
+    # Part 1: Staging - Clean raw data → olist_stag
     staging:
-      +materialized: view
-    # Config for models under intermediate/
-    intermediate:
-      +materialized: ephemeral
-    # Config for models under marts/
-    marts:
       +materialized: table
+    # Part 2: Warehouse - Star schema → olist_warehouse  
+    warehouse:
+      +materialized: table
+    # Part 3: Analytics - Mart views → olist_analytics
+    marts:
+      +materialized: view
 
-# Configuring tests
-tests:
-  +store_failures: true
-  +schema: "dbt_test_audit"
+# # Configuring tests
+# tests:
+#   +store_failures: true
+#   +schema: "dbt_test_audit"
 
-vars:
-  # The `start_date` variable will be accessible in all resources
-  start_date: '2016-01-01'
-  # This is the end date for data processing
-  end_date: '2018-12-31'
+# vars:
+#   # The `start_date` variable will be accessible in all resources
+#   start_date: '2016-01-01'
+#   # This is the end date for data processing
+#   end_date: '2018-12-31'

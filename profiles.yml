@@ -1,0 +1,91 @@
+# =================================================================
+# Unified Olist Project Profiles Configuration
+# =================================================================
+# 
+# This profiles.yml file supports all dbt projects in the workspace:
+# - meltano_olist (in meltano-olist/ directory) 
+# - dbt_clean_olist (in dbt_clean_olist/ directory)
+#
+# Author: M2Project Team
+# Last Updated: August 31, 2025
+# =================================================================
+
+# Meltano Olist Project Profile
+meltano_olist:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: extended-legend-470014-n7
+      dataset: olist_raw
+      location: US
+      keyfile: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-db75dec7d87a.json
+      job_execution_timeout_seconds: 300
+      maximum_bytes_billed: 1000000000
+      priority: interactive
+      job_retries: 1
+
+    staging:
+      type: bigquery
+      method: service-account
+      project: extended-legend-470014-n7
+      dataset: olist_staging
+      location: US
+      keyfile: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-db75dec7d87a.json
+      job_execution_timeout_seconds: 300
+      maximum_bytes_billed: 1000000000
+      priority: interactive
+      job_retries: 1
+
+    prod:
+      type: bigquery
+      method: service-account
+      project: extended-legend-470014-n7
+      dataset: olist_analytics
+      location: US
+      keyfile: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-db75dec7d87a.json
+      job_execution_timeout_seconds: 300
+      maximum_bytes_billed: 1000000000
+      priority: interactive
+      job_retries: 1
+
+# Clean Olist Project Profile
+dbt_clean_olist:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: extended-legend-470014-n7
+      dataset: olist_raw
+      location: US
+      keyfile: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-db75dec7d87a.json
+      job_execution_timeout_seconds: 300
+      maximum_bytes_billed: 1000000000
+      priority: interactive
+      job_retries: 1
+
+    staging:
+      type: bigquery
+      method: service-account
+      project: extended-legend-470014-n7
+      dataset: olist_staging
+      location: US
+      keyfile: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-db75dec7d87a.json
+      job_execution_timeout_seconds: 300
+      maximum_bytes_billed: 1000000000
+      priority: interactive
+      job_retries: 1
+
+    prod:
+      type: bigquery
+      method: service-account
+      project: extended-legend-470014-n7
+      dataset: olist_analytics
+      location: US
+      keyfile: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-db75dec7d87a.json
+      job_execution_timeout_seconds: 300
+      maximum_bytes_billed: 1000000000
+      priority: interactive
+      job_retries: 1

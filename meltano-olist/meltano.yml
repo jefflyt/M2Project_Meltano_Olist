@@ -1,14 +1,15 @@
-# Meltano Configuration for Olist E-commerce ETL Pipeline
-# ========================================================
+# Meltano Configuration for Olist E-commerce Data Extraction
+# ==========================================================
 #
-# This configuration defines the ETL pipeline that extracts data from
-# PostgreSQL (Supabase) and loads it into Google BigQuery.
+# This configuration defines a simple ETL pipeline that extracts data from
+# PostgreSQL (Supabase) and loads it into Google BigQuery raw dataset.
 #
-# Pipeline: tap-postgres → target-bigquery
+# Purpose: Data extraction only - no transformations or analytics
+# Pipeline: tap-postgres → target-bigquery → olist_raw dataset
 #
 # Author: M2Project Team
-# Last Updated: August 30, 2025
-# ========================================================
+# Last Updated: August 31, 2025
+# ==========================================================
 
 version: 1
 
@@ -18,53 +19,52 @@ default_environment: dev
 # Unique project identifier
 project_id: b8644576-3b67-453a-8f52-fe664f1834b7
 
-# Available environments
+# Single environment - this is a simple extraction pipeline
 environments:
-- name: dev        # Development environment
-- name: staging    # Staging environment
-- name: prod       # Production environment
+- name: dev        # Single environment for extraction pipeline
 
 # Plugin configurations
 plugins:
-  # Data Extractors
+  # Data Extractor - PostgreSQL (Supabase)
   extractors:
   - name: tap-postgres
     variant: meltanolabs
     pip_url: meltanolabs-tap-postgres
     config:
-      # PostgreSQL connection settings
-      database: postgres
+      database: postgres    # PostgreSQL connection settings for Supabase
       filter_schemas:
-        - public          # Only extract from public schema
+        - public            # Extract only from public schema
       port: 5432
       user: postgres.wfpaqulgzvxvyosikwmj
       host: aws-1-ap-southeast-1.pooler.supabase.com
+      # Password set via environment variable: TAP_POSTGRES_PASSWORD
 
-      # Additional settings (can be overridden by environment variables)
-      # password: ${TAP_POSTGRES_PASSWORD}  # Set in .env file
-
-  # Data Loaders
+  # Data Loader - BigQuery Raw Dataset
   loaders:
   - name: target-bigquery
     variant: z3z1ma
     pip_url: git+https://github.com/z3z1ma/target-bigquery.git
     config:
-      # Batch processing settings
-      batch_size: 104857600  # 100MB batch size for optimal performance
-
+      project: 'extended-legend-470014-n7'  # BigQuery raw dataset configuration
+      dataset: olist_raw                    # Raw data storage
       # Authentication
       credentials_path: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-db75dec7d87a.json
-
-      # BigQuery target settings
-      dataset: olist_raw
-      denormalized: true      # Flatten nested data structures
-      flattening_max_depth: 1 # Maximum depth for flattening
+      # Data loading settings
+      batch_size: 104857600               # 100MB batches
+      method: batch_job                   # Efficient batch loading
+      denormalized: true                  # Flatten nested structures
       flattening_enabled: true
-      method: batch_job       # Use BigQuery batch loading
-      project: 'extended-legend-470014-n7'
+      flattening_max_depth: 1
+
+# Pipeline definition - simple extract and load
+schedules:
+- name: daily_extract
+  job: tap-postgres target-bigquery
+  interval: "@daily"
 
 # Notes:
-# - Credentials path should be updated for different environments
-# - Dataset will be created automatically if it doesn't exist
-# - Batch size can be adjusted based on data volume and performance needs
-# - Consider using meltano environments for different deployment targets
+# - This is a simple data extraction pipeline - no transformations
+# - All data transformations are handled separately by dbt in dbt_clean_olist/
+# - Raw data goes to BigQuery olist_raw dataset
+# - Credentials and passwords should be set via environment variables
+# - Run with: meltano run tap-postgres target-bigquery

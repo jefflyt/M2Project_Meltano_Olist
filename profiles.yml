@@ -50,15 +50,15 @@ meltano_olist:
       priority: interactive
       job_retries: 1
 
-# Clean Olist Project Profile
-dbt_clean_olist:
+# Clean Olist Data Transformation Profile
+dbt_olist:
   target: dev
   outputs:
     dev:
       type: bigquery
       method: service-account
       project: extended-legend-470014-n7
-      dataset: olist_raw
+      dataset: olist_staging
       location: US
       keyfile: /Users/jefflee/SCTP/M2Project/extended-legend-470014-n7-db75dec7d87a.json
       job_execution_timeout_seconds: 300

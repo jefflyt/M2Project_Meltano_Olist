@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Clean Olist dbt Convenience Script
+# Olist dbt Data Transformation Script
 # Usage: ./dbt-run.sh [command] [args...]
 # Examples:
 #   ./dbt-run.sh debug
@@ -21,13 +21,13 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # Project info
-PROJECT_NAME="dbt_clean_olist"
-PROFILE_NAME="dbt_clean_olist"
+PROJECT_NAME="dbt_olist"
+PROFILE_NAME="dbt_olist"
 PROFILES_DIR="/Users/jefflee/SCTP/M2Project/M2Project_Meltano_Olist"
 DEFAULT_TARGET="dev"
 
 echo -e "${CYAN}=================================================================${NC}"
-echo -e "${CYAN}🚀 Clean Olist dbt Transform - Using Centralized Profiles${NC}"
+echo -e "${CYAN}🧹 Olist Data Transformation - Using Centralized Profiles${NC}"
 echo -e "${CYAN}=================================================================${NC}"
 echo -e "${BLUE}[${PROJECT_NAME}] Project: ${PROJECT_NAME}${NC}"
 echo -e "${BLUE}[${PROJECT_NAME}] Profile Directory: ${PROFILES_DIR}${NC}"
